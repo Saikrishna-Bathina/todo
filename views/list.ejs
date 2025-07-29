@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todo App</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script>
+    function validateForm() {
+      const task = document.getElementById("ele1").value.trim();
+      if (task === "") {
+        alert("Please enter a task.");
+        return false;
+      }
+      return true;
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>My Todo List</h1>
+  </header>
+
+  <main class="container">
+    <form action="/" method="POST" onsubmit="return validateForm()">
+      <input type="text" name="ele1" id="ele1" placeholder="Add your task here" />
+      <select name="priority">
+        <option value="Low">Low</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="High">High</option>
+      </select>
+      <button type="submit">Add</button>
+    </form>
+
+    <form action="/" method="GET" class="filter-form">
+      <label>Filter:</label>
+      <select name="priority" onchange="this.form.submit()">
+        <option value="All" <%= filter === 'All' ? 'selected' : '' %>>All</option>
+        <option value="Low" <%= filter === 'Low' ? 'selected' : '' %>>Low</option>
+        <option value="Medium" <%= filter === 'Medium' ? 'selected' : '' %>>Medium</option>
+        <option value="High" <%= filter === 'High' ? 'selected' : '' %>>High</option>
+      </select>
+    </form>
+
+    <% if (todos.length === 0) { %>
+      <p>No tasks found.</p>
+    <% } %>
+
+    <% todos.forEach(todo => { %>
+      <div class="todo-item">
+        <form action="/edit/<%= todo.id %>?_method=PUT" method="POST">
+          <input type="text" name="updatedText" value="<%= todo.text %>" />
+          <button type="submit">Update</button>
+        </form>
+
+        <form action="/delete/<%= todo.id %>?_method=DELETE" method="POST">
+          <button type="submit" class="delete-btn">Delete</button>
+        </form>
+
+        
+      </div>
+    <% }); %>
+  </main>
+
+
+</body>
+</html>
